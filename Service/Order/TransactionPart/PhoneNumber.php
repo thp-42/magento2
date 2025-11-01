@@ -4,7 +4,6 @@ namespace Mollie\Payment\Service\Order\TransactionPart;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Mollie\Payment\Model\Client\Payments;
-use Mollie\Payment\Model\Methods\In3;
 use Mollie\Payment\Service\Order\TransactionPartInterface;
 
 class PhoneNumber implements TransactionPartInterface
@@ -261,54 +260,7 @@ class PhoneNumber implements TransactionPartInterface
 
     public function process(OrderInterface $order, $apiMethod, array $transaction)
     {
-        if ($order->getPayment()->getMethod() != In3::CODE) {
-            return $transaction;
-        }
-
-        if ($apiMethod == Payments::CHECKOUT_TYPE) {
-            return $transaction;
-        }
-
-        $address = $order->getBillingAddress();
-        $countryCode = $address->getCountryId();
-        $phoneNumber = $address->getTelephone();
-
-        if (empty($phoneNumber)) {
-            return $transaction;
-        }
-
-        try {
-            $transaction['billingAddress']['phone'] = $this->formatInE164($countryCode, $phoneNumber);
-        } catch (\InvalidArgumentException $exception) {
-            // Silently ignore the exception
-        }
-
+        // In3 payment method has been removed - phone number not required
         return $transaction;
-    }
-
-    private function formatInE164(string $countryCodeIso2, string $phoneNumber): string
-    {
-        if (!array_key_exists($countryCodeIso2, self::COUNTRY_CODE_MAPPING)) {
-            throw new \InvalidArgumentException(sprintf('Country code "%s" is not supported', $countryCodeIso2));
-        }
-
-        $countryCode = self::COUNTRY_CODE_MAPPING[$countryCodeIso2];
-
-        $phoneNumber = preg_replace('/^\+' . $countryCode . '/', '', $phoneNumber);
-        $phoneNumber = preg_replace('/^00' . $countryCode . '/', '', $phoneNumber);
-
-        $formattedNumber = preg_replace('/\D/', '', $phoneNumber);
-
-        // Remove the leading zeros from the number
-        $formattedNumber = ltrim($formattedNumber, '0');
-
-        // Add the '+' sign and the country code to the beginning of the formatted number
-        $formattedNumber = '+' . $countryCode . $formattedNumber;
-
-        if (strlen($formattedNumber) <= 3 || !preg_match('/^\+[1-9]\d{1,14}$/', $formattedNumber)) {
-            throw new \InvalidArgumentException(__('Phone number "%s" is not valid', $formattedNumber));
-        }
-
-        return $formattedNumber;
     }
 }
