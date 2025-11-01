@@ -538,38 +538,6 @@
     <virtualType name="MollieCreditcardVaultAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
     </virtualType>
 
-    <!-- Google Pay -->
-        <arguments>
-            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
-            <argument name="infoBlockType" xsi:type="string">Mollie\Payment\Block\Info\Base</argument>
-            <argument name="commandPool" xsi:type="object">MollieCommandPool</argument>
-        </arguments>
-    </type>
-
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-            </argument>
-        </arguments>
-    </virtualType>
-
-        <arguments>
-        </arguments>
-    </virtualType>
-
-        <arguments>
-        </arguments>
-    </virtualType>
-
-        <arguments>
-            <argument name="validators" xsi:type="array">
-            </argument>
-        </arguments>
-    </virtualType>
-
-        <arguments>
-        </arguments>
-    </virtualType>
-
     <!-- Paymentlink -->
     <type name="Mollie\Payment\Model\Methods\Paymentlink">
         <arguments>
@@ -612,38 +580,6 @@
     <virtualType name="MolliePaymentlinkCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
         <arguments>
             <argument name="config" xsi:type="object">MolliePaymentlinkConfig</argument>
-        </arguments>
-    </virtualType>
-
-    <!-- Point Of Sale -->
-        <arguments>
-            <argument name="formBlockType" xsi:type="string">Mollie\Payment\Block\Form\Pointofsale</argument>
-            <argument name="infoBlockType" xsi:type="string">Mollie\Payment\Block\Info\Base</argument>
-            <argument name="commandPool" xsi:type="object">MollieCommandPool</argument>
-        </arguments>
-    </type>
-
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-            </argument>
-        </arguments>
-    </virtualType>
-
-        <arguments>
-        </arguments>
-    </virtualType>
-
-        <arguments>
-        </arguments>
-    </virtualType>
-
-        <arguments>
-            <argument name="validators" xsi:type="array">
-            </argument>
-        </arguments>
-    </virtualType>
-
-        <arguments>
         </arguments>
     </virtualType>
 

@@ -10,8 +10,6 @@ use Mollie\Payment\Api\PaymentTokenRepositoryInterface;
 use Mollie\Payment\Config;
 use Mollie\Payment\Model\Methods\ApplePay;
 use Mollie\Payment\Model\Methods\Creditcard;
-use Mollie\Payment\Model\Methods\Directdebit;
-use Mollie\Payment\Model\Methods\Pointofsale;
 use Mollie\Payment\Model\Mollie;
 
 class RedirectUrl
@@ -52,23 +50,9 @@ class RedirectUrl
     {
         $redirectUrl = $methodInstance->startTransaction($order);
 
-        /**
-         * Directdebit does not return an url when in test mode.
-         */
-        if (!$redirectUrl && $methodInstance instanceof Directdebit && $this->config->isTestMode()) {
-            return $this->url->getUrl('checkout/onepage/success/');
-        }
-
         $emptyUrlAllowed = $methodInstance instanceof ApplePay || $methodInstance instanceof Creditcard;
         if (!$redirectUrl && $emptyUrlAllowed) {
             return $this->url->getUrl('checkout/onepage/success/');
-        }
-
-        if ($methodInstance instanceof Pointofsale && !$redirectUrl) {
-            return $this->url->getUrl(
-                'mollie/checkout/pointofsale',
-                ['token' => base64_encode($this->encryptor->encrypt((string)$order->getId()))]
-            );
         }
 
         if (!$redirectUrl) {

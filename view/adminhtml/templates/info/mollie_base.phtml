@@ -10,8 +10,6 @@
  * @var \Magento\Framework\Escaper $escaper
  */
 
-use Mollie\Payment\Model\Methods\Voucher;
-
 // Magento 2.3 compatibility
 isset($escaper) || $escaper = $block; // @phpstan-ignore-line
 
@@ -21,15 +19,6 @@ $status = $block->getPaymentStatus();
 <div class="mollie-method">
     <img src="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('Mollie_Payment::images/' . $block->getPaymentImage())) ?>"/>
     <?= $escaper->escapeHtml($block->getMethod()->getTitle()); ?>
-    <?php if ($block->getMethod() instanceof Voucher): ?>
-    |
-    <?= $escaper->escapeHtml(__(
-        '%1 using Voucher, %2 direct.',
-        $block->formatPrice($block->getAmountPaidByVoucher()),
-        $block->formatPrice($block->getRemainderAmount())
-    ));
-    ?>
-    <?php endif; ?>
 
     <table class="data-table admin__table-secondary">
         <tbody>
